@@ -1,5 +1,7 @@
 package com.hollowcore.hollowjava.graphic;
 
+import androidx.annotation.NonNull;
+
 import com.hollowcore.hollowjava.geometry.Point;
 import com.hollowcore.hollowjava.geometry.Rectangle;
 
@@ -10,16 +12,29 @@ public class Path {
     // MARK: - Definitions
     //----------------------------------------------------------------------------------------------------------------------------------
     public enum Command {
-        Move,
-        AddLine,
-        AddQuadraticCurve,
-        AddCubicCurve,
-        CloseSubpath,
+        MOVE,
+        ADD_LINE,
+        ADD_QUADRATIC_CURVE,
+        ADD_CUBIC_CURVE,
+        CLOSE_SUBPATH,
     }
 
     public class Element {
         public Command command;
         public Point[] points;
+
+        @NonNull
+        @Override
+        public String toString() {
+            switch (command) {
+                case MOVE: return "M " + points[0].getX() + " " + points[0].getY() + " ";
+                case ADD_LINE: return "L " + points[0].getX() + " " + points[0].getY() + " ";
+                case ADD_QUADRATIC_CURVE: return "Q " + points[0].getX() + " " + points[0].getY() + " " + points[1].getX() + " " + points[1].getY() + " ";
+                case ADD_CUBIC_CURVE: return "M " + points[0].getX() + " " + points[0].getY() + " " + points[1].getX() + " " + points[1].getY() + " " + points[2].getX() + " " + points[2].getY() + " ";
+                case CLOSE_SUBPATH: return "Z ";
+                default: return "";
+            }
+        }
     }
 
     public interface IntersectionListener {
@@ -93,14 +108,14 @@ public class Path {
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Path Intersection
     //----------------------------------------------------------------------------------------------------------------------------------
-    public boolean containsPoint(Point point) { return containsPointNative(point); }
-    public native boolean containsPointNative(Point point);
+    public boolean contains(Point point) { return containsNative(point); }
+    public native boolean containsNative(Point point);
 
-    public boolean containsPointNonZero(Point point) { return containsPointNonZeroNative(point); }
-    public native boolean containsPointNonZeroNative(Point point);
+//    public boolean containsNonZero(Point point) { return containsNonZeroNative(point); }
+//    public native boolean containsNonZeroNative(Point point);
 
-    public boolean intersectsPath(Path other) { return intersectsPathNative(other); }
-    public native boolean intersectsPathNative(Path other);
+    public boolean intersects(Path other) { return intersectsNative(other); }
+    public native boolean intersectsNative(Path other);
 
     public void intersections(Path other, IntersectionListener intersectionListener) { intersectionsNative(other, intersectionListener); }
     public native void intersectionsNative(Path other, IntersectionListener intersectionListener);
