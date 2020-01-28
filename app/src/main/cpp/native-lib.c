@@ -1,14 +1,6 @@
 #include <jni.h>
 #include "HollowCore/Source/HollowCore.h"
 
-JNIEXPORT jstring JNICALL
-Java_com_hollowcore_hollowshapes_MainActivity_stringFromJNI(JNIEnv* env, jobject this) {
-    HCStringRef hello = HCStringCreateWithCString("Hello from HollowCore");
-    jstring helloJava = (*env)->NewStringUTF(env, HCStringAsCString(hello));
-    HCRelease(hello);
-    return helloJava;
-}
-
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -54,6 +46,11 @@ JNIEXPORT void JNICALL
 Java_com_hollowcore_hollowjava_geometry_Point_initNative(JNIEnv *env, jobject thiz, jdouble x, jdouble y) {
     HCPoint self = HCPointMake(x, y);
     HCPointJNIInstallReferenceInJObject(env, thiz, self);
+}
+
+JNIEXPORT void JNICALL
+Java_com_hollowcore_hollowjava_geometry_Point_finalizeNative(JNIEnv *env, jobject thiz) {
+    HCPointJNIReleaseReferenceInJObject(env, thiz);
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
@@ -205,6 +202,11 @@ Java_com_hollowcore_hollowjava_graphic_Path_initNative(JNIEnv *env, jobject thiz
     HCPathRef self = HCPathCreate(svgPathData);
     (*env)->ReleaseStringUTFChars(env, svg_path_data, svgPathData);
     HCPathJNIInstallReferenceInJObject(env, thiz, self);
+}
+
+JNIEXPORT void JNICALL
+Java_com_hollowcore_hollowjava_graphic_Path_finalizeNative(JNIEnv *env, jobject thiz) {
+    HCPathJNIReleaseReferenceInJObject(env, thiz);
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------

@@ -30,7 +30,7 @@ public class Path {
                 case MOVE: return "M " + points[0].getX() + " " + points[0].getY() + " ";
                 case ADD_LINE: return "L " + points[0].getX() + " " + points[0].getY() + " ";
                 case ADD_QUADRATIC_CURVE: return "Q " + points[0].getX() + " " + points[0].getY() + " " + points[1].getX() + " " + points[1].getY() + " ";
-                case ADD_CUBIC_CURVE: return "M " + points[0].getX() + " " + points[0].getY() + " " + points[1].getX() + " " + points[1].getY() + " " + points[2].getX() + " " + points[2].getY() + " ";
+                case ADD_CUBIC_CURVE: return "C " + points[0].getX() + " " + points[0].getY() + " " + points[1].getX() + " " + points[1].getY() + " " + points[2].getX() + " " + points[2].getY() + " ";
                 case CLOSE_SUBPATH: return "Z ";
                 default: return "";
             }
@@ -40,6 +40,7 @@ public class Path {
     public interface IntersectionListener {
         boolean intersection(Path path, Path otherPath, Point point);
     }
+
     public static final double COARSE_FLATNESS = 1.01;
     public static final double NORMAL_FLATNESS = 1.001;
     public static final double FINE_FLATNESS = 1.0001;
@@ -50,6 +51,13 @@ public class Path {
     public Path(String svgPathData) { initNative(svgPathData); }
     private native void initNative(String svgPathData);
     private Path() { reference = 0xDEADBEEF; }
+
+    @Override
+    protected void finalize() throws Throwable {
+        finalizeNative();
+        super.finalize();
+    }
+    private native void finalizeNative();
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Object Polymorphic Functions
