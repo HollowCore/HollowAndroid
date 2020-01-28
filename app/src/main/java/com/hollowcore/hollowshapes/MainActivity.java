@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
         }
         pathDescription += "CurrentPoint: " + path.getCurrentPoint() + "\n";
         pathDescription += "SVGPathData: " + path.asSVGPathData() + "\n";
+        pathDescription += "LineSegmentCount: " + path.asLineSegments().length / 2 + "\n";
         pathDescription += "Contains(3,3): " + path.contains(new Point(3,3)) + "\n";
         pathDescription += "Contains(30,30): " + path.contains(new Point(30.0,30.0)) + "\n";
         pathDescription += "Contains(100,100): " + path.contains(new Point(100.0,100.0)) + "\n";

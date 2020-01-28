@@ -365,9 +365,15 @@ JNIEXPORT jobjectArray JNICALL
 Java_com_hollowcore_hollowjava_graphic_Path_asLineSegmentsNative(JNIEnv *env, jobject thiz, jdouble flatness_threshold) {
     HCPathRef self = HCPathJNIFromJObject(env, thiz);
     HCDataRef lineSegmentData = HCPathAsLineSegmentDataRetained(self, HCPathFlatnessNormal);
-    // TODO: Package line segments
+    HCInteger pointCount = HCDataSize(lineSegmentData) / sizeof(HCPoint);
+    jclass pointClazz = (*env)->FindClass(env, HCPointJNIClass);
+    jobjectArray pointArray = (*env)->NewObjectArray(env, pointCount, pointClazz, NULL);
+    for (HCInteger pointIndex = 0; pointIndex < pointCount; pointIndex++) {
+        HCPoint point = ((HCPoint*)HCDataBytes(lineSegmentData))[pointIndex];
+        (*env)->SetObjectArrayElement(env, pointArray, pointIndex, HCPointJNINewJObject(env, point));
+    }
     HCRelease(lineSegmentData);
-    return NULL;
+    return pointArray;
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------

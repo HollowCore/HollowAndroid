@@ -40,9 +40,9 @@ public class Path {
     public interface IntersectionListener {
         boolean intersection(Path path, Path otherPath, Point point);
     }
-    public static final double coarseFlatness = 1.01;
-    public static final double normalFlatness = 1.001;
-    public static final double fineFlatness = 1.0001;
+    public static final double COARSE_FLATNESS = 1.01;
+    public static final double NORMAL_FLATNESS = 1.001;
+    public static final double FINE_FLATNESS = 1.0001;
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Construction
@@ -102,6 +102,7 @@ public class Path {
     public String asSVGPathData() { return asSVGPathDataNative(); }
     public native String asSVGPathDataNative();
 
+    public Point[] asLineSegments() { return asLineSegments(NORMAL_FLATNESS); }
     public Point[] asLineSegments(double flatnessThreshold) { return asLineSegmentsNative(flatnessThreshold); }
     public native Point[] asLineSegmentsNative(double flatnessThreshold);
 
