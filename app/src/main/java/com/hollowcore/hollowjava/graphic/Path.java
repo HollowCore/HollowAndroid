@@ -33,7 +33,8 @@ public class Path {
     // MARK: - Construction
     //----------------------------------------------------------------------------------------------------------------------------------
     public Path(String svgPathData) { initNative(svgPathData); }
-    private native long initNative(String svgPathData);
+    private native void initNative(String svgPathData);
+    private Path() { reference = 0xDEADBEEF; }
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Object Polymorphic Functions

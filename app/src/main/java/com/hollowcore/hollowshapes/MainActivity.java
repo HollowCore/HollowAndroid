@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.widget.TextView;
 
 import com.hollowcore.hollowjava.graphic.Path;
+import com.hollowcore.hollowjava.geometry.Point;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -20,7 +21,14 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView tv = findViewById(R.id.sample_text);
-        tv.setText("Count " + new Path("M0,1L2,3,4,5").getElementCount());
+        Path path = new Path("M1,1L4,2 5,5 3,4Z");
+        String pathDescription = "";
+        pathDescription += "Count: " + path.getElementCount() + "\n";
+        pathDescription += "CurrentPoint: " + path.getCurrentPoint() + "\n";
+        pathDescription += "SVGPathData: " + path.asSVGPathData() + "\n";
+        Point p = new Point(3,3);
+        pathDescription += "Contains(3,3): " + path.containsPoint(new Point(3,3)) + "\n";
+        tv.setText(pathDescription);
     }
 
     /**

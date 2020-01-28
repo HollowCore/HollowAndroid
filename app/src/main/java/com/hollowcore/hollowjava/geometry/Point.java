@@ -1,17 +1,22 @@
 package com.hollowcore.hollowjava.geometry;
 
 public class Point {
+    private long reference = 0;
+
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Special Values
     //----------------------------------------------------------------------------------------------------------------------------------
-    public static final Point invalid = new Point(Double.NaN, Double.NaN);
-    public static final Point zero = new Point(0.0, 0.0);
+//    public static final Point invalid = new Point(Double.NaN, Double.NaN);
+//    public static final Point zero = new Point(0.0, 0.0);
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Constructors
     //----------------------------------------------------------------------------------------------------------------------------------
-    public Point(double x, double y) { initNative(x, y); }
-    private static native Point initNative(double x, double y);
+    public Point(double x, double y) {
+        initNative(x, y);
+    }
+    private native void initNative(double x, double y);
+    private Point() { reference = 0xDEADBEEF; }
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Attributes
