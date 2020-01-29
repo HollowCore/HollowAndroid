@@ -46,21 +46,21 @@ jobject HCColorJNINewJObject(JNIEnv* env, HCColor self) {
 // MARK: - Constructors
 //----------------------------------------------------------------------------------------------------------------------------------
 JNIEXPORT void JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_initNative(JNIEnv *env, jobject thiz, jdouble x, jdouble y) {
-HCColor self = HCColorMake(x, y);
-HCColorJNIInstallReferenceInJObject(env, thiz, self);
+Java_com_hollowcore_hollowjava_graphic_Color_initNative(JNIEnv *env, jobject thiz, jdouble alpha, jdouble red, jdouble green, jdouble blue) {
+    HCColor self = HCColorMake(alpha, red, green, blue);
+    HCColorJNIInstallReferenceInJObject(env, thiz, self);
 }
 
 JNIEXPORT void JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_finalizeNative(JNIEnv *env, jobject thiz) {
-HCColorJNIReleaseReferenceInJObject(env, thiz);
+Java_com_hollowcore_hollowjava_graphic_Color_finalizeNative(JNIEnv *env, jobject thiz) {
+    HCColorJNIReleaseReferenceInJObject(env, thiz);
 }
 
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - Object Polymorphic Functions
 //----------------------------------------------------------------------------------------------------------------------------------
 JNIEXPORT jboolean JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_isEqualNative(JNIEnv *env, jobject thiz, jobject other_instance) {
+Java_com_hollowcore_hollowjava_graphic_Color_isEqualNative(JNIEnv *env, jobject thiz, jobject other_instance) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCColor other = HCColorJNIFromJObject(env, other_instance);
     HCBoolean isEqual = HCColorIsEqual(self, other);
@@ -68,14 +68,14 @@ Java_com_hollowcore_hollowjava_geometry_Color_isEqualNative(JNIEnv *env, jobject
 }
 
 JNIEXPORT jlong JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_hashNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_graphic_Color_hashNative(JNIEnv *env, jobject thiz) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCInteger hashValue = HCColorHashValue(self);
     return (jlong)hashValue;
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_toStringNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_graphic_Color_toStringNative(JNIEnv *env, jobject thiz) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     // TODO: memoryStream
 //    HCColorPrint(self, memoryStream);
@@ -88,28 +88,28 @@ Java_com_hollowcore_hollowjava_geometry_Color_toStringNative(JNIEnv *env, jobjec
 // MARK: - Attributes
 //----------------------------------------------------------------------------------------------------------------------------------
 JNIEXPORT jdouble JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_getAlphaNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_graphic_Color_getAlphaNative(JNIEnv *env, jobject thiz) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCReal alpha = self.a;
     return (jdouble)alpha;
 }
 
 JNIEXPORT jdouble JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_getRedNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_graphic_Color_getRedNative(JNIEnv *env, jobject thiz) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCReal red = self.r;
     return (jdouble)red;
 }
 
 JNIEXPORT jdouble JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_getGreenNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_graphic_Color_getGreenNative(JNIEnv *env, jobject thiz) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCReal green = self.g;
     return (jdouble)green;
 }
 
 JNIEXPORT jdouble JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_getBlueNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_graphic_Color_getBlueNative(JNIEnv *env, jobject thiz) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCReal blue = self.b;
     return (jdouble)blue;
@@ -119,21 +119,21 @@ Java_com_hollowcore_hollowjava_geometry_Color_getBlueNative(JNIEnv *env, jobject
 // MARK: - Queries
 //----------------------------------------------------------------------------------------------------------------------------------
 JNIEXPORT jboolean JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_isClampedNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_graphic_Color_isClampedNative(JNIEnv *env, jobject thiz) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCBoolean isClamped = HCColorIsClamped(self);
     return (jboolean)isClamped;
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_isInvalidNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_graphic_Color_isInvalidNative(JNIEnv *env, jobject thiz) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCBoolean isInvalid = HCColorIsInvalid(self);
     return (jboolean)isInvalid;
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_isSimilarNative(JNIEnv *env, jobject thiz, jobject other_instance, jdouble axis_dissimilarity) {
+Java_com_hollowcore_hollowjava_graphic_Color_isSimilarNative(JNIEnv *env, jobject thiz, jobject other_instance, jdouble axis_dissimilarity) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCColor other = HCColorJNIFromJObject(env, other_instance);
     HCBoolean isSimilar = HCColorIsSimilar(self, other, axis_dissimilarity);
@@ -144,7 +144,7 @@ Java_com_hollowcore_hollowjava_geometry_Color_isSimilarNative(JNIEnv *env, jobje
 // MARK: - Operations
 //----------------------------------------------------------------------------------------------------------------------------------
 JNIEXPORT jobject JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_aggregatedNative(JNIEnv *env, jobject thiz, jobject other_instance) {
+Java_com_hollowcore_hollowjava_graphic_Color_aggregatedNative(JNIEnv *env, jobject thiz, jobject other_instance) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCColor other = HCColorJNIFromJObject(env, other_instance);
     HCColor aggregated = HCColorAdd(self, other);
@@ -152,7 +152,7 @@ Java_com_hollowcore_hollowjava_geometry_Color_aggregatedNative(JNIEnv *env, jobj
 }
 
 JNIEXPORT jobject JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_scaledByColorNative(JNIEnv *env, jobject thiz, jobject other_instance) {
+Java_com_hollowcore_hollowjava_graphic_Color_scaledByColorNative(JNIEnv *env, jobject thiz, jobject other_instance) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCColor other = HCColorJNIFromJObject(env, other_instance);
     HCColor scaled = HCColorMultiply(self, other);
@@ -160,21 +160,21 @@ Java_com_hollowcore_hollowjava_geometry_Color_scaledByColorNative(JNIEnv *env, j
 }
 
 JNIEXPORT jobject JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_scaledByDoubleNative(JNIEnv *env, jobject thiz, jdouble scalar) {
+Java_com_hollowcore_hollowjava_graphic_Color_scaledByDoubleNative(JNIEnv *env, jobject thiz, jdouble scalar) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCColor scaled = HCColorScale(self, scalar);
     return HCColorJNINewJObject(env, scaled);
 }
 
 JNIEXPORT jobject JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_clampedNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_graphic_Color_clampedNative(JNIEnv *env, jobject thiz) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCColor clamped = HCColorClamp(self);
     return HCColorJNINewJObject(env, clamped);
 }
 
 JNIEXPORT jobject JNICALL
-Java_com_hollowcore_hollowjava_geometry_Color_interpolatedNative(JNIEnv *env, jobject thiz, jobject other_instance, jdouble t) {
+Java_com_hollowcore_hollowjava_graphic_Color_interpolatedNative(JNIEnv *env, jobject thiz, jobject other_instance, jdouble t) {
     HCColor self = HCColorJNIFromJObject(env, thiz);
     HCColor other = HCColorJNIFromJObject(env, other_instance);
     HCColor interpolated = HCColorInterpolate(self, other, t);

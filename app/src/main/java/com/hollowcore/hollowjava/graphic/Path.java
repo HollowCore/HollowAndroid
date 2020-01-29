@@ -75,59 +75,59 @@ public class Path {
     // MARK: - Attributes
     //----------------------------------------------------------------------------------------------------------------------------------
     public int getElementCount() { return getElementCountNative(); }
-    public native int getElementCountNative();
+    private native int getElementCountNative();
 
     public Element getElement(int elementIndex) { return getElementNative(elementIndex); }
-    public native Element getElementNative(int elementIndex);
+    private native Element getElementNative(int elementIndex);
 
     public Point getCurrentPoint() { return getCurrentPointNative(); }
-    public native Point getCurrentPointNative();
+    private native Point getCurrentPointNative();
 
     public Rectangle getBounds() { return getBoundsNative(); }
-    public native Rectangle getBoundsNative();
+    private native Rectangle getBoundsNative();
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Path Manipulation
     //----------------------------------------------------------------------------------------------------------------------------------
     public void move(double x, double y) { moveNative(x, y); }
-    public native void moveNative(double x, double y);
+    private native void moveNative(double x, double y);
 
     public void addLine(double x, double y) { addLineNative(x, y); }
-    public native void addLineNative(double x, double y);
+    private native void addLineNative(double x, double y);
 
     public void addQuadraticCurve(double cx, double cy, double x, double y) { addQuadraticCurveNative(cx, cy, x, y); }
-    public native void addQuadraticCurveNative(double cx, double cy, double x, double y);
+    private native void addQuadraticCurveNative(double cx, double cy, double x, double y);
 
     public void addCubicCurve(double cx0, double cy0, double cx1, double cy1, double x, double y) { addCubicCurveNative(cx0, cy0, cx1, cy1, x, y); }
-    public native void addCubicCurveNative(double cx0, double cy0, double cx1, double cy1, double x, double y);
+    private native void addCubicCurveNative(double cx0, double cy0, double cx1, double cy1, double x, double y);
 
     public void closeSubpath() { closeSubpathNative(); }
-    public native void closeSubpathNative();
+    private native void closeSubpathNative();
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Path Conversion
     //----------------------------------------------------------------------------------------------------------------------------------
     public String asSVGPathData() { return asSVGPathDataNative(); }
-    public native String asSVGPathDataNative();
+    private native String asSVGPathDataNative();
 
     public Point[] asLineSegments() { return asLineSegments(NORMAL_FLATNESS); }
     public Point[] asLineSegments(double flatnessThreshold) { return asLineSegmentsNative(flatnessThreshold); }
-    public native Point[] asLineSegmentsNative(double flatnessThreshold);
+    private native Point[] asLineSegmentsNative(double flatnessThreshold);
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Path Intersection
     //----------------------------------------------------------------------------------------------------------------------------------
     public boolean contains(Point point) { return containsNative(point); }
-    public native boolean containsNative(Point point);
+    private native boolean containsNative(Point point);
 
 //    public boolean containsNonZero(Point point) { return containsNonZeroNative(point); }
-//    public native boolean containsNonZeroNative(Point point);
+//    private native boolean containsNonZeroNative(Point point);
 
     public boolean intersects(Path other) { return intersectsNative(other); }
-    public native boolean intersectsNative(Path other);
+    private native boolean intersectsNative(Path other);
 
     public void intersections(Path other, IntersectionListener intersectionListener) { intersectionsNative(other, intersectionListener); }
-    public native void intersectionsNative(Path other, IntersectionListener intersectionListener);
+    private native void intersectionsNative(Path other, IntersectionListener intersectionListener);
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Path Evaluation

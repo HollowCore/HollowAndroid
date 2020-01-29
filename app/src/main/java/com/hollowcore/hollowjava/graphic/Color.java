@@ -1,4 +1,4 @@
-package com.hollowcore.hollowjava.geometry;
+package com.hollowcore.hollowjava.graphic;
 
 public class Color {
     private long reference = 0;
@@ -71,7 +71,7 @@ public class Color {
     public Color scaled(Color other) { return scaledByColorNative(other); }
     private native Color scaledByColorNative(Color other);
 
-    public Color scaled(double scalar) { return scaledByDoubleNative(scalar)}
+    public Color scaled(double scalar) { return scaledByDoubleNative(scalar); }
     private native Color scaledByDoubleNative(double scalar);
 
     public Color clamped() { return clampedNative(); }

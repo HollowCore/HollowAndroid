@@ -25,6 +25,7 @@ add_library(
         Geometry/HCSize+JNI.c
         Graphic/HCColor+JNI.c
         Graphic/HCPath+JNI.c
+        Graphic/HCRaster+JNI.c
         native-lib.c
 )
 

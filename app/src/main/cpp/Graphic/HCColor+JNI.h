@@ -15,7 +15,7 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
-#define HCColorJNIClass "com/hollowcore/hollowjava/geometry/Color"
+#define HCColorJNIClass "com/hollowcore/hollowjava/graphic/Color"
 #define HCColorJNIReferenceFieldID "reference"
 #define HCColorJNIReferenceFieldSignature "J"
 
