@@ -26,15 +26,6 @@ public class Point {
     private native void finalizeNative();
 
     //----------------------------------------------------------------------------------------------------------------------------------
-    // MARK: - Attributes
-    //----------------------------------------------------------------------------------------------------------------------------------
-    public double getX() { return getXNative(); }
-    private native double getXNative();
-
-    public double getY() { return getYNative(); }
-    private native double getYNative();
-
-    //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Object Polymorphic Functions
     //----------------------------------------------------------------------------------------------------------------------------------
     public boolean isEqual(Point other) { return isEqualNative(other); }
@@ -45,6 +36,15 @@ public class Point {
 
     public String toString() { return toStringNative(); }
     private native String toStringNative();
+
+    //----------------------------------------------------------------------------------------------------------------------------------
+    // MARK: - Attributes
+    //----------------------------------------------------------------------------------------------------------------------------------
+    public double getX() { return getXNative(); }
+    private native double getXNative();
+
+    public double getY() { return getYNative(); }
+    private native double getYNative();
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Queries
