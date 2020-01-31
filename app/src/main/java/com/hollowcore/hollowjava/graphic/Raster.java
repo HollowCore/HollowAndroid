@@ -126,14 +126,14 @@ public class Raster {
     // MARK: - File Operations
     //----------------------------------------------------------------------------------------------------------------------------------
     public Raster loadPPM(String path) { return loadPPMNative(path); }
-    private native Raster loadPPMNative(String path);
+    private static native Raster loadPPMNative(String path);
 
     public void savePPM(String path) { savePPM(path, false); }
     public void savePPM(String path, boolean binary) { savePPMNative(path, binary); }
     private native void savePPMNative(String path, boolean binary);
 
     public Raster loadBMP(String path) { return loadBMPNative(path); }
-    private native Raster loadBMPNative(String path);
+    private static native Raster loadBMPNative(String path);
 
     public void saveBMP(String path) { saveBMP(path, false); }
     public void saveBMP(String path, boolean reverse) { saveBMPNative(path, reverse); }

@@ -218,10 +218,10 @@ Java_com_hollowcore_hollowjava_graphic_Path_asLineSegmentsNative(JNIEnv *env, jo
     HCDataRef lineSegmentData = HCPathAsLineSegmentDataRetained(self, HCPathFlatnessNormal);
     HCInteger pointCount = HCDataSize(lineSegmentData) / sizeof(HCPoint);
     jclass pointClazz = (*env)->FindClass(env, HCPointJNIClass);
-    jobjectArray pointArray = (*env)->NewObjectArray(env, pointCount, pointClazz, NULL);
+    jobjectArray pointArray = (*env)->NewObjectArray(env, (jsize)pointCount, pointClazz, NULL);
     for (HCInteger pointIndex = 0; pointIndex < pointCount; pointIndex++) {
         HCPoint point = ((HCPoint*)HCDataBytes(lineSegmentData))[pointIndex];
-        (*env)->SetObjectArrayElement(env, pointArray, pointIndex, HCPointJNINewJObject(env, point));
+        (*env)->SetObjectArrayElement(env, pointArray, (jsize)pointIndex, HCPointJNINewJObject(env, point));
     }
     HCRelease(lineSegmentData);
     return pointArray;

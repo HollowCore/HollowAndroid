@@ -20,6 +20,9 @@ add_library(
         SHARED
 
         # Provides a relative path to your source file(s).
+        Data/HCData+JNI.c
+        Data/HCNumber+JNI.c
+        Data/HCString+JNI.c
         Geometry/HCPoint+JNI.c
         Geometry/HCRectangle+JNI.c
         Geometry/HCSize+JNI.c

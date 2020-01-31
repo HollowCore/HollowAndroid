@@ -123,7 +123,7 @@ Java_com_hollowcore_hollowjava_graphic_Raster_getPixelsNative(JNIEnv *env, jobje
     HCInteger width = end_xindex - start_xindex;
     HCInteger height = end_yindex - start_yindex;
     HCColor pixels[width * height];
-    HCRasterPixelsAt(self, start_xindex, start_yindex, end_xindex, end_yindex, &pixels);
+    HCRasterPixelsAt(self, start_xindex, start_yindex, end_xindex, end_yindex, pixels);
     HCRasterRef pixelSource = HCRasterCreate(width, height);
     HCRasterSetPixelsAt(pixelSource, 0, 0, width, height, pixels);
     return HCRasterJNINewJObject(env, pixelSource);
@@ -140,7 +140,7 @@ Java_com_hollowcore_hollowjava_graphic_Raster_setPixelsNative(JNIEnv *env, jobje
     HCInteger width = HCRasterWidth(pixelSource);
     HCInteger height = HCRasterHeight(pixelSource);
     HCColor pixels[width * height];
-    HCRasterPixelsAt(pixelSource, 0, 0, width, height, &pixels);
+    HCRasterPixelsAt(pixelSource, 0, 0, width, height, pixels);
     HCRasterSetPixelsAt(self, startXIndex, startYIndex, endXIndex, endYIndex, pixels);
 }
 
@@ -301,7 +301,7 @@ Java_com_hollowcore_hollowjava_graphic_Raster_asARGB8888Native(JNIEnv *env, jobj
 // MARK: - File Operations
 //----------------------------------------------------------------------------------------------------------------------------------
 JNIEXPORT jobject JNICALL
-Java_com_hollowcore_hollowjava_graphic_Raster_loadPPMNative(JNIEnv *env, jobject thiz, jstring path_string) {
+Java_com_hollowcore_hollowjava_graphic_Raster_loadPPMNative(JNIEnv *env, jclass clazz, jstring path_string) {
     const char* path = (*env)->GetStringUTFChars(env, path_string, NULL);
     HCRasterRef self = HCRasterCreateByLoadingPPM(path);
     (*env)->ReleaseStringUTFChars(env, path_string, path);
@@ -318,7 +318,7 @@ Java_com_hollowcore_hollowjava_graphic_Raster_savePPMNative(JNIEnv *env, jobject
 }
 
 JNIEXPORT jobject JNICALL
-Java_com_hollowcore_hollowjava_graphic_Raster_loadBMPNative(JNIEnv *env, jobject thiz, jstring path_string) {
+Java_com_hollowcore_hollowjava_graphic_Raster_loadBMPNative(JNIEnv *env, jclass clazz, jstring path_string) {
     const char* path = (*env)->GetStringUTFChars(env, path_string, NULL);
     HCRasterRef self = HCRasterCreateByLoadingBMP(path);
     (*env)->ReleaseStringUTFChars(env, path_string, path);
