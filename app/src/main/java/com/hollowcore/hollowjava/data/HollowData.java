@@ -1,24 +1,24 @@
 package com.hollowcore.hollowjava.data;
 
-public class Data {
+public class HollowData {
     private long reference = 0;
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Construction
     //----------------------------------------------------------------------------------------------------------------------------------
-    public Data(byte[] bytes) { initWithBytesNative(bytes); }
+    public HollowData(byte[] bytes) { initWithBytesNative(bytes); }
     private native void initWithBytesNative(byte[] bytes);
 
-    public Data(boolean b) { initWithBooleanNative(b); }
+    public HollowData(boolean b) { initWithBooleanNative(b); }
     private native void initWithBooleanNative(boolean b);
 
-    public Data(int integer) { initWithIntegerNative(integer); }
+    public HollowData(int integer) { initWithIntegerNative(integer); }
     private native void initWithIntegerNative(int integer);
 
-    public Data(double real) { initWithRealNative(real); }
+    public HollowData(double real) { initWithRealNative(real); }
     private native void initWithRealNative(double real);
 
-    private Data() { reference = 0xDEADBEEF; }
+    private HollowData() { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {
@@ -30,8 +30,8 @@ public class Data {
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Object Polymorphic Functions
     //----------------------------------------------------------------------------------------------------------------------------------
-    public boolean isEqual(Data other) { return isEqualNative(other); }
-    private native boolean isEqualNative(Data other);
+    public boolean isEqual(HollowData other) { return isEqualNative(other); }
+    private native boolean isEqualNative(HollowData other);
 
     public long hashValue() { return hashNative(); }
     private native long hashNative();

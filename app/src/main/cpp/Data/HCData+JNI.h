@@ -16,7 +16,7 @@
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
 
-#define HCDataJNIClass "com/hollowcore/hollowjava/data/Data"
+#define HCDataJNIClass "com/hollowcore/hollowjava/data/HollowData"
 #define HCDataJNIReferenceFieldID "reference"
 #define HCDataJNIReferenceFieldSignature "J"
 

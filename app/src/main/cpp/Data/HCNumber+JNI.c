@@ -45,25 +45,25 @@ jobject HCNumberJNINewJObject(JNIEnv* env, HCNumberRef self) {
 // MARK: - Construction
 //----------------------------------------------------------------------------------------------------------------------------------
 JNIEXPORT void JNICALL
-Java_com_hollowcore_hollowjava_data_Number_initWithBooleanNative(JNIEnv *env, jobject thiz, jboolean b) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_initWithBooleanNative(JNIEnv *env, jobject thiz, jboolean b) {
     HCNumberRef self = HCNumberCreateWithBoolean(b);
     HCNumberJNIInstallReferenceInJObject(env, thiz, self);
 }
 
 JNIEXPORT void JNICALL
-Java_com_hollowcore_hollowjava_data_Number_initWithIntegerNative(JNIEnv *env, jobject thiz, jint integer) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_initWithIntegerNative(JNIEnv *env, jobject thiz, jint integer) {
     HCNumberRef self = HCNumberCreateWithInteger(integer);
     HCNumberJNIInstallReferenceInJObject(env, thiz, self);
 }
 
 JNIEXPORT void JNICALL
-Java_com_hollowcore_hollowjava_data_Number_initWithRealNative(JNIEnv *env, jobject thiz, jdouble real) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_initWithRealNative(JNIEnv *env, jobject thiz, jdouble real) {
     HCNumberRef self = HCNumberCreateWithReal(real);
     HCNumberJNIInstallReferenceInJObject(env, thiz, self);
 }
 
 JNIEXPORT void JNICALL
-Java_com_hollowcore_hollowjava_data_Number_finalizeNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_finalizeNative(JNIEnv *env, jobject thiz) {
     HCNumberJNIReleaseReferenceInJObject(env, thiz);
 }
 
@@ -71,20 +71,20 @@ Java_com_hollowcore_hollowjava_data_Number_finalizeNative(JNIEnv *env, jobject t
 // MARK: - Object Polymorphic Functions
 //----------------------------------------------------------------------------------------------------------------------------------
 JNIEXPORT jboolean JNICALL
-Java_com_hollowcore_hollowjava_data_Number_isEqualNative(JNIEnv *env, jobject thiz, jobject otherInstance) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_isEqualNative(JNIEnv *env, jobject thiz, jobject otherInstance) {
     HCNumberRef self = HCNumberJNIFromJObject(env, thiz);
     HCNumberRef other = HCNumberJNIFromJObject(env, otherInstance);
     return (jboolean)HCNumberIsEqual(self, other);
 }
 
 JNIEXPORT jlong JNICALL
-Java_com_hollowcore_hollowjava_data_Number_hashNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_hashNative(JNIEnv *env, jobject thiz) {
     HCNumberRef self = HCNumberJNIFromJObject(env, thiz);
     return self == NULL ? 0 : HCNumberHashValue(self);
 }
 
 JNIEXPORT jstring JNICALL
-Java_com_hollowcore_hollowjava_data_Number_toStringNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_toStringNative(JNIEnv *env, jobject thiz) {
     HCNumberRef self = HCNumberJNIFromJObject(env, thiz);
     // TODO: memoryStream
 //    HCNumberPrint(self, memoryStream);
@@ -97,42 +97,42 @@ Java_com_hollowcore_hollowjava_data_Number_toStringNative(JNIEnv *env, jobject t
 // MARK: - Conversion
 //----------------------------------------------------------------------------------------------------------------------------------
 JNIEXPORT jboolean JNICALL
-Java_com_hollowcore_hollowjava_data_Number_isBooleanNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_isBooleanNative(JNIEnv *env, jobject thiz) {
     HCNumberRef self = HCNumberJNIFromJObject(env, thiz);
     HCBoolean isBoolean = HCNumberIsBoolean(self);
     return (jboolean)isBoolean;
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_hollowcore_hollowjava_data_Number_asBooleanNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_asBooleanNative(JNIEnv *env, jobject thiz) {
     HCNumberRef self = HCNumberJNIFromJObject(env, thiz);
     HCBoolean asBoolean = HCNumberAsBoolean(self);
     return (jboolean)asBoolean;
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_hollowcore_hollowjava_data_Number_isIntegerNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_isIntegerNative(JNIEnv *env, jobject thiz) {
     HCNumberRef self = HCNumberJNIFromJObject(env, thiz);
     HCBoolean isInteger = HCNumberIsInteger(self);
     return (jboolean)isInteger;
 }
 
 JNIEXPORT jint JNICALL
-Java_com_hollowcore_hollowjava_data_Number_asIntegerNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_asIntegerNative(JNIEnv *env, jobject thiz) {
     HCNumberRef self = HCNumberJNIFromJObject(env, thiz);
     HCInteger asInteger = HCNumberAsInteger(self);
     return (jint)asInteger;
 }
 
 JNIEXPORT jboolean JNICALL
-Java_com_hollowcore_hollowjava_data_Number_isRealNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_isRealNative(JNIEnv *env, jobject thiz) {
     HCNumberRef self = HCNumberJNIFromJObject(env, thiz);
     HCBoolean isReal = HCNumberIsReal(self);
     return (jboolean)isReal;
 }
 
 JNIEXPORT jdouble JNICALL
-Java_com_hollowcore_hollowjava_data_Number_asRealNative(JNIEnv *env, jobject thiz) {
+Java_com_hollowcore_hollowjava_data_HollowNumber_asRealNative(JNIEnv *env, jobject thiz) {
     HCNumberRef self = HCNumberJNIFromJObject(env, thiz);
     HCReal asReal = HCNumberAsReal(self);
     return (jdouble)asReal;

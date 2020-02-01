@@ -1,21 +1,21 @@
 package com.hollowcore.hollowjava.data;
 
-public class Number {
+public class HollowNumber {
     private long reference = 0;
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Construction
     //----------------------------------------------------------------------------------------------------------------------------------
-    public Number(boolean b) { initWithBooleanNative(b); }
+    public HollowNumber(boolean b) { initWithBooleanNative(b); }
     private native void initWithBooleanNative(boolean b);
 
-    public Number(int integer) { initWithIntegerNative(integer); }
+    public HollowNumber(int integer) { initWithIntegerNative(integer); }
     private native void initWithIntegerNative(int integer);
 
-    public Number(double real) { initWithRealNative(real); }
+    public HollowNumber(double real) { initWithRealNative(real); }
     private native void initWithRealNative(double real);
     
-    private Number() { reference = 0xDEADBEEF; }
+    private HollowNumber() { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {
@@ -27,8 +27,8 @@ public class Number {
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Object Polymorphic Functions
     //----------------------------------------------------------------------------------------------------------------------------------
-    public boolean isEqual(Number other) { return isEqualNative(other); }
-    private native boolean isEqualNative(Number other);
+    public boolean isEqual(HollowNumber other) { return isEqualNative(other); }
+    private native boolean isEqualNative(HollowNumber other);
 
     public long hashValue() { return hashNative(); }
     private native long hashNative();
