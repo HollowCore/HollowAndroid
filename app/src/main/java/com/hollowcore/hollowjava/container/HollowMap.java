@@ -1,6 +1,10 @@
 package com.hollowcore.hollowjava.container;
 
+import com.hollowcore.hollowjava.core.HollowObject;
+
 import java.util.AbstractMap;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -11,10 +15,16 @@ public class HollowMap extends AbstractMap implements Map {
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Construction
     //----------------------------------------------------------------------------------------------------------------------------------
+    public HollowMap() { this(8); }
     public HollowMap(int capacity) { initNative(capacity); }
     private native void initNative(int capacity);
 
-    private HollowMap() { reference = 0xDEADBEEF; }
+    public HollowMap(Map m) {
+        this(m.size());
+        putAll(m);
+    }
+
+    private HollowMap(HollowObject unused) { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {
@@ -89,8 +99,35 @@ public class HollowMap extends AbstractMap implements Map {
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Map Interface Support
     //----------------------------------------------------------------------------------------------------------------------------------
-    // TODO: Implement with iterator with hasNext, next, remove
     public Set<Entry> entrySet() {
-        return null;
+        // TODO: Find a way to eliminate needing to construct this
+        Set<Entry> entrySet = new HashSet<>();
+        for (int keyIndex = 0; keyIndex < size(); keyIndex++) {
+            Entry entry = new HollowMapEntry(this, keyIndex);
+            entrySet.add(entry);
+        }
+        return entrySet;
+    }
+
+    private class HollowMapEntry implements Entry {
+        private HollowMapEntry(HollowMap map, int iterationIndex) {
+            this.map = map;
+            this.iterationIndex = iterationIndex;
+        }
+
+        private HollowMap map;
+        private int iterationIndex;
+
+        public Object getKey() {
+            return map.getKey(iterationIndex);
+        }
+
+        public Object getValue() {
+            return map.get(getKey());
+        }
+
+        public Object setValue(Object o) {
+            return map.put(getKey(), o);
+        }
     }
 }

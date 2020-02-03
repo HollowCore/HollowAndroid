@@ -8,35 +8,33 @@
 //
 
 #include "HCNumber+JNI.h"
+#include "../Core/HCObject+JNI.h"
 
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
+jclass HCNumberJNIClazz = NULL;
+
+void HCNumberJNIOnLoad(JNIEnv* env) {
+    HCNumberJNIClazz = (*env)->NewGlobalRef(env, (*env)->FindClass(env, HCNumberJNIClass));
+    HCObjectJNIAssociateTypeToClass(env, HCNumberType, HCNumberJNIClazz);
+}
+
 void HCNumberJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCNumberRef self) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCNumberJNIReferenceFieldID, HCNumberJNIReferenceFieldSignature);
-    (*env)->SetLongField(env, thiz, fieldID, (jlong)self);
+    HCObjectJNIInstallReferenceInJObject(env, thiz, self);
 }
 
 void HCNumberJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCNumberJNIReferenceFieldID, HCNumberJNIReferenceFieldSignature);
-    HCNumberRef self = (HCNumberRef)(*env)->GetLongField(env, thiz, fieldID);
-    (*env)->SetLongField(env, thiz, fieldID, (jlong)NULL);
-    HCRelease(self);
+    HCObjectJNIReleaseReferenceInJObject(env, thiz);
 }
 
 HCNumberRef HCNumberJNIFromJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCNumberJNIReferenceFieldID, HCNumberJNIReferenceFieldSignature);
-    HCNumberRef self = (HCNumberRef)(*env)->GetLongField(env, thiz, fieldID);
-    return self;
+    return HCObjectJNIFromJObject(env, thiz);
 }
 
 jobject HCNumberJNINewJObject(JNIEnv* env, HCNumberRef self) {
-    jclass clazz = (*env)->FindClass(env, HCNumberJNIClass);
-    jmethodID constructor = (*env)->GetMethodID(env, clazz, "<init>", "()V");
-    jobject thiz = (*env)->NewObject(env, clazz, constructor);
+    jmethodID constructor = (*env)->GetMethodID(env, HCNumberJNIClazz, "<init>", "()V");
+    jobject thiz = (*env)->NewObject(env, HCNumberJNIClazz, constructor);
     HCNumberJNIInstallReferenceInJObject(env, thiz, self);
     return thiz;
 }
@@ -44,6 +42,12 @@ jobject HCNumberJNINewJObject(JNIEnv* env, HCNumberRef self) {
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - Construction
 //----------------------------------------------------------------------------------------------------------------------------------
+JNIEXPORT void JNICALL
+Java_com_hollowcore_hollowjava_data_HollowNumber_initNative(JNIEnv *env, jobject thiz) {
+    HCNumberRef self = HCNumberCreate();
+    HCNumberJNIInstallReferenceInJObject(env, thiz, self);
+}
+
 JNIEXPORT void JNICALL
 Java_com_hollowcore_hollowjava_data_HollowNumber_initWithBooleanNative(JNIEnv *env, jobject thiz, jboolean b) {
     HCNumberRef self = HCNumberCreateWithBoolean(b);

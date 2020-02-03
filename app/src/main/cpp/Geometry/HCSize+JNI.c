@@ -7,37 +7,41 @@
 //
 
 #include "HCSize+JNI.h"
+#include "../Core/HCObject+JNI.h"
 
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
+jclass HCSizeJNIClazz = NULL;
+
+void HCSizeJNIOnLoad(JNIEnv* env) {
+    HCSizeJNIClazz = (*env)->NewGlobalRef(env, (*env)->FindClass(env, HCSizeJNIClass));
+    HCObjectJNIAssociateTypeToClass(env, HCDataType, HCSizeJNIClazz);
+}
+
 void HCSizeJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCSize self) {
     HCDataRef value = HCDataCreateWithBytes(sizeof(self), (HCByte*)&self);
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCSizeJNIReferenceFieldID, HCSizeJNIReferenceFieldSignature);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCSizeJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
     (*env)->SetLongField(env, thiz, fieldID, (jlong)value);
 }
 
 void HCSizeJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCSizeJNIReferenceFieldID, HCSizeJNIReferenceFieldSignature);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCSizeJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
     HCDataRef value = (HCDataRef)(*env)->GetLongField(env, thiz, fieldID);
     (*env)->SetLongField(env, thiz, fieldID, (jlong)NULL);
     HCRelease(value);
 }
 
 HCSize HCSizeJNIFromJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCSizeJNIReferenceFieldID, HCSizeJNIReferenceFieldSignature);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCSizeJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
     HCDataRef value = (HCDataRef)(*env)->GetLongField(env, thiz, fieldID);
     HCSize self = *((HCSize*)HCDataBytes(value));
     return self;
 }
 
 jobject HCSizeJNINewJObject(JNIEnv* env, HCSize self) {
-    jclass clazz = (*env)->FindClass(env, HCSizeJNIClass);
-    jmethodID constructor = (*env)->GetMethodID(env, clazz, "<init>", "()V");
-    jobject thiz = (*env)->NewObject(env, clazz, constructor);
+    jmethodID constructor = (*env)->GetMethodID(env, HCSizeJNIClazz, "<init>", "()V");
+    jobject thiz = (*env)->NewObject(env, HCSizeJNIClazz, constructor);
     HCSizeJNIInstallReferenceInJObject(env, thiz, self);
     return thiz;
 }

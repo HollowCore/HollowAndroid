@@ -13,31 +13,28 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
+jclass HCListJNIClazz = NULL;
+
+void HCListJNIOnLoad(JNIEnv* env) {
+    HCListJNIClazz = (*env)->NewGlobalRef(env, (*env)->FindClass(env, HCListJNIClass));
+    HCObjectJNIAssociateTypeToClass(env, HCListType, HCListJNIClazz);
+}
+
 void HCListJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCListRef self) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCListJNIReferenceFieldID, HCListJNIReferenceFieldSignature);
-    (*env)->SetLongField(env, thiz, fieldID, (jlong)self);
+    HCObjectJNIInstallReferenceInJObject(env, thiz, self);
 }
 
 void HCListJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCListJNIReferenceFieldID, HCListJNIReferenceFieldSignature);
-    HCListRef self = (HCListRef)(*env)->GetLongField(env, thiz, fieldID);
-    (*env)->SetLongField(env, thiz, fieldID, (jlong)NULL);
-    HCRelease(self);
+    HCObjectJNIReleaseReferenceInJObject(env, thiz);
 }
 
 HCListRef HCListJNIFromJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCListJNIReferenceFieldID, HCListJNIReferenceFieldSignature);
-    HCListRef self = (HCListRef)(*env)->GetLongField(env, thiz, fieldID);
-    return self;
+    return HCObjectJNIFromJObject(env, thiz);
 }
 
 jobject HCListJNINewJObject(JNIEnv* env, HCListRef self) {
-    jclass clazz = (*env)->FindClass(env, HCListJNIClass);
-    jmethodID constructor = (*env)->GetMethodID(env, clazz, "<init>", "()V");
-    jobject thiz = (*env)->NewObject(env, clazz, constructor);
+    jmethodID constructor = (*env)->GetMethodID(env, HCListJNIClazz, "<init>", "()V");
+    jobject thiz = (*env)->NewObject(env, HCListJNIClazz, constructor);
     HCListJNIInstallReferenceInJObject(env, thiz, self);
     return thiz;
 }

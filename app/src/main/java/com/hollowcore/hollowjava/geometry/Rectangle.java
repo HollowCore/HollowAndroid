@@ -1,5 +1,7 @@
 package com.hollowcore.hollowjava.geometry;
 
+import com.hollowcore.hollowjava.core.HollowObject;
+
 public class Rectangle {
     private long reference = 0;
 
@@ -28,7 +30,7 @@ public class Rectangle {
     public Rectangle(double x, double y, double width, double height) { initComponentsNative(x, y, width, height); }
     private native void initComponentsNative(double x, double y, double width, double height);
 
-    private Rectangle() { reference = 0xDEADBEEF; }
+    private Rectangle(HollowObject unused) { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {

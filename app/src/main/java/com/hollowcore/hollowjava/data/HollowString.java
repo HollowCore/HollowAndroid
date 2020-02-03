@@ -1,5 +1,7 @@
 package com.hollowcore.hollowjava.data;
 
+import com.hollowcore.hollowjava.core.HollowObject;
+
 // TODO: Make class conform to CharSequence
 public class HollowString {
     private long reference = 0;
@@ -7,6 +9,9 @@ public class HollowString {
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Construction
     //----------------------------------------------------------------------------------------------------------------------------------
+    public HollowString() { initNative(); }
+    private native void initNative();
+
     public HollowString(byte[] utf8) { initWithUTF8Native(utf8); }
     private native void initWithUTF8Native(byte[] bytesUTF8);
 
@@ -28,7 +33,7 @@ public class HollowString {
     public HollowString(double real) { initWithRealNative(real); }
     private native void initWithRealNative(double real);
 
-    private HollowString() { reference = 0xDEADBEEF; }
+    private HollowString(HollowObject unused) { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {

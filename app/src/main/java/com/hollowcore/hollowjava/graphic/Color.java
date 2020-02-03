@@ -1,5 +1,7 @@
 package com.hollowcore.hollowjava.graphic;
 
+import com.hollowcore.hollowjava.core.HollowObject;
+
 public class Color {
     private long reference = 0;
 
@@ -14,7 +16,7 @@ public class Color {
     //----------------------------------------------------------------------------------------------------------------------------------
     public Color(double alpha, double red, double green, double blue) { initNative(alpha, red, green, blue); }
     private native void initNative(double alpha, double red, double green, double blue);
-    private Color() { reference = 0xDEADBEEF; }
+    private Color(HollowObject unused) { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {

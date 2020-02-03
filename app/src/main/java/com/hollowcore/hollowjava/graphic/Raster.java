@@ -1,5 +1,7 @@
 package com.hollowcore.hollowjava.graphic;
 
+import com.hollowcore.hollowjava.core.HollowObject;
+
 public class Raster {
     private long reference = 0;
 
@@ -14,7 +16,7 @@ public class Raster {
     //----------------------------------------------------------------------------------------------------------------------------------
     public Raster(int width, int height) { initNative(width, height); }
     private native void initNative(int width, int height);
-    private Raster() { reference = 0xDEADBEEF; }
+    private Raster(HollowObject unused) { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {

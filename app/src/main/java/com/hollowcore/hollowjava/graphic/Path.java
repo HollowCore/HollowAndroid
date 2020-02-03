@@ -2,6 +2,7 @@ package com.hollowcore.hollowjava.graphic;
 
 import androidx.annotation.NonNull;
 
+import com.hollowcore.hollowjava.core.HollowObject;
 import com.hollowcore.hollowjava.geometry.Point;
 import com.hollowcore.hollowjava.geometry.Rectangle;
 
@@ -48,9 +49,10 @@ public class Path {
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Construction
     //----------------------------------------------------------------------------------------------------------------------------------
+    public Path() { this(""); }
     public Path(String svgPathData) { initNative(svgPathData); }
     private native void initNative(String svgPathData);
-    private Path() { reference = 0xDEADBEEF; }
+    private Path(HollowObject unused) { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {

@@ -15,11 +15,9 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
-
 #define HCListJNIClass "com/hollowcore/hollowjava/container/HollowList"
-#define HCListJNIReferenceFieldID "reference"
-#define HCListJNIReferenceFieldSignature "J"
 
+void HCListJNIOnLoad(JNIEnv* env);
 void HCListJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCListRef self);
 void HCListJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz);
 HCListRef HCListJNIFromJObject(JNIEnv* env, jobject thiz);

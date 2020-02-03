@@ -9,35 +9,34 @@
 
 #include "HCMap+JNI.h"
 #include "../Core/HCObject+JNI.h"
+#include "HCSet+JNI.h"
+#include "../HollowCore/Source/Container/HCMap_Internal.h"
 
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
+jclass HCMapJNIClazz = NULL;
+
+void HCMapJNIOnLoad(JNIEnv* env) {
+    HCMapJNIClazz = (*env)->NewGlobalRef(env, (*env)->FindClass(env, HCMapJNIClass));
+    HCObjectJNIAssociateTypeToClass(env, HCMapType, HCMapJNIClazz);
+}
+
 void HCMapJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCMapRef self) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCMapJNIReferenceFieldID, HCMapJNIReferenceFieldSignature);
-    (*env)->SetLongField(env, thiz, fieldID, (jlong)self);
+    HCObjectJNIInstallReferenceInJObject(env, thiz, self);
 }
 
 void HCMapJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCMapJNIReferenceFieldID, HCMapJNIReferenceFieldSignature);
-    HCMapRef self = (HCMapRef)(*env)->GetLongField(env, thiz, fieldID);
-    (*env)->SetLongField(env, thiz, fieldID, (jlong)NULL);
-    HCRelease(self);
+    HCObjectJNIReleaseReferenceInJObject(env, thiz);
 }
 
 HCMapRef HCMapJNIFromJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCMapJNIReferenceFieldID, HCMapJNIReferenceFieldSignature);
-    HCMapRef self = (HCMapRef)(*env)->GetLongField(env, thiz, fieldID);
-    return self;
+    return HCObjectJNIFromJObject(env, thiz);
 }
 
 jobject HCMapJNINewJObject(JNIEnv* env, HCMapRef self) {
-    jclass clazz = (*env)->FindClass(env, HCMapJNIClass);
-    jmethodID constructor = (*env)->GetMethodID(env, clazz, "<init>", "()V");
-    jobject thiz = (*env)->NewObject(env, clazz, constructor);
+    jmethodID constructor = (*env)->GetMethodID(env, HCMapJNIClazz, "<init>", "()V");
+    jobject thiz = (*env)->NewObject(env, HCMapJNIClazz, constructor);
     HCMapJNIInstallReferenceInJObject(env, thiz, self);
     return thiz;
 }
@@ -193,4 +192,14 @@ Java_com_hollowcore_hollowjava_container_HollowMap_removeNative(JNIEnv *env, job
     HCRef key = HCObjectJNIFromJObject(env, key_instance);
     HCRef existingObject = HCMapRemoveObjectRetainedForKey(self, key);
     return HCObjectJNINewJObject(env, existingObject);
+}
+
+//----------------------------------------------------------------------------------------------------------------------------------
+// MARK: - Map Interface Support
+//----------------------------------------------------------------------------------------------------------------------------------
+JNIEXPORT jobject JNICALL
+Java_com_hollowcore_hollowjava_container_HollowMap_entrySetNative(JNIEnv *env, jobject thiz) {
+    HCMapRef self = HCMapJNIFromJObject(env, thiz);
+    HCSetRef entrySet = self->pairs;
+    return HCSetJNINewJObject(env, entrySet);
 }

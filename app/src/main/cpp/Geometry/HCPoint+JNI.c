@@ -7,37 +7,41 @@
 //
 
 #include "HCPoint+JNI.h"
+#include "../Core/HCObject+JNI.h"
 
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
+jclass HCPointJNIClazz = NULL;
+
+void HCPointJNIOnLoad(JNIEnv* env) {
+    HCPointJNIClazz = (*env)->NewGlobalRef(env, (*env)->FindClass(env, HCPointJNIClass));
+    HCObjectJNIAssociateTypeToClass(env, HCDataType, HCPointJNIClazz);
+}
+
 void HCPointJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCPoint self) {
     HCDataRef value = HCDataCreateWithBytes(sizeof(self), (HCByte*)&self);
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCPointJNIReferenceFieldID, HCPointJNIReferenceFieldSignature);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCPointJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
     (*env)->SetLongField(env, thiz, fieldID, (jlong)value);
 }
 
 void HCPointJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCPointJNIReferenceFieldID, HCPointJNIReferenceFieldSignature);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCPointJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
     HCDataRef value = (HCDataRef)(*env)->GetLongField(env, thiz, fieldID);
     (*env)->SetLongField(env, thiz, fieldID, (jlong)NULL);
     HCRelease(value);
 }
 
 HCPoint HCPointJNIFromJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCPointJNIReferenceFieldID, HCPointJNIReferenceFieldSignature);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCPointJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
     HCDataRef value = (HCDataRef)(*env)->GetLongField(env, thiz, fieldID);
     HCPoint self = *((HCPoint*)HCDataBytes(value));
     return self;
 }
 
 jobject HCPointJNINewJObject(JNIEnv* env, HCPoint self) {
-    jclass clazz = (*env)->FindClass(env, HCPointJNIClass);
-    jmethodID constructor = (*env)->GetMethodID(env, clazz, "<init>", "()V");
-    jobject thiz = (*env)->NewObject(env, clazz, constructor);
+    jmethodID constructor = (*env)->GetMethodID(env, HCPointJNIClazz, "<init>", "()V");
+    jobject thiz = (*env)->NewObject(env, HCPointJNIClazz, constructor);
     HCPointJNIInstallReferenceInJObject(env, thiz, self);
     return thiz;
 }

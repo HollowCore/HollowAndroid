@@ -1,5 +1,7 @@
 package com.hollowcore.hollowjava.geometry;
 
+import com.hollowcore.hollowjava.core.HollowObject;
+
 public class Point {
     private long reference = 0;
 
@@ -16,7 +18,7 @@ public class Point {
         initNative(x, y);
     }
     private native void initNative(double x, double y);
-    private Point() { reference = 0xDEADBEEF; }
+    private Point(HollowObject unused) { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {

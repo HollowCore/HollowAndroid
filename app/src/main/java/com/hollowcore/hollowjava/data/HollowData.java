@@ -1,11 +1,16 @@
 package com.hollowcore.hollowjava.data;
 
+import com.hollowcore.hollowjava.core.HollowObject;
+
 public class HollowData {
     private long reference = 0;
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Construction
     //----------------------------------------------------------------------------------------------------------------------------------
+    public HollowData() { initNative(); }
+    private native void initNative();
+
     public HollowData(byte[] bytes) { initWithBytesNative(bytes); }
     private native void initWithBytesNative(byte[] bytes);
 
@@ -18,7 +23,7 @@ public class HollowData {
     public HollowData(double real) { initWithRealNative(real); }
     private native void initWithRealNative(double real);
 
-    private HollowData() { reference = 0xDEADBEEF; }
+    private HollowData(HollowObject unused) { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {

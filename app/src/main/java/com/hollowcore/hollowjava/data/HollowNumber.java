@@ -1,11 +1,16 @@
 package com.hollowcore.hollowjava.data;
 
+import com.hollowcore.hollowjava.core.HollowObject;
+
 public class HollowNumber {
     private long reference = 0;
 
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Construction
     //----------------------------------------------------------------------------------------------------------------------------------
+    public HollowNumber() { initNative(); }
+    private native void initNative();
+
     public HollowNumber(boolean b) { initWithBooleanNative(b); }
     private native void initWithBooleanNative(boolean b);
 
@@ -15,7 +20,7 @@ public class HollowNumber {
     public HollowNumber(double real) { initWithRealNative(real); }
     private native void initWithRealNative(double real);
     
-    private HollowNumber() { reference = 0xDEADBEEF; }
+    private HollowNumber(HollowObject unused) { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {

@@ -15,11 +15,9 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
-
 #define HCDataJNIClass "com/hollowcore/hollowjava/data/HollowData"
-#define HCDataJNIReferenceFieldID "reference"
-#define HCDataJNIReferenceFieldSignature "J"
 
+void HCDataJNIOnLoad(JNIEnv* env);
 void HCDataJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCDataRef self);
 void HCDataJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz);
 HCDataRef HCDataJNIFromJObject(JNIEnv* env, jobject thiz);

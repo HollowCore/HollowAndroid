@@ -8,37 +8,45 @@
 //
 
 #include "HCPath+JNI.h"
+#include "../Core/HCObject+JNI.h"
 #include "../Geometry/HCPoint+JNI.h"
 #include "../Geometry/HCRectangle+JNI.h"
 
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
+jclass HCPathJNIClazz = NULL;
+
+#define HCPathJNICommandEnum "com/hollowcore/hollowjava/graphic/Path$Command"
+#define HCPathJNIElementClass "com/hollowcore/hollowjava/graphic/Path$Element"
+#define HCPathJNIElementCommandFieldID "command"
+#define HCPathJNIElementCommandFieldSignature "L" HCPathJNICommandEnum ";"
+#define HCPathJNIElementPointsFieldID "points"
+#define HCPathJNIElementPointsFieldSignature "[L" HCPointJNIClass ";"
+#define HCPathJNIIntersectionListenerClass "com/hollowcore/hollowjava/graphic/Path$IntersectionListener"
+#define HCPathJNIIntersectionListenerIntersectionMethodID "intersection"
+#define HCPathJNIIntersectionListenerIntersectionMethodSignature "(L" HCPathJNIClass ";L" HCPathJNIClass ";L" HCPointJNIClass ";)Z"
+
+void HCPathJNIOnLoad(JNIEnv* env) {
+    HCPathJNIClazz = (*env)->NewGlobalRef(env, (*env)->FindClass(env, HCPathJNIClass));
+    HCObjectJNIAssociateTypeToClass(env, HCPathType, HCPathJNIClazz);
+}
+
 void HCPathJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCPathRef self) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCPathJNIReferenceFieldID, HCPathJNIReferenceFieldSignature);
-    (*env)->SetLongField(env, thiz, fieldID, (jlong)self);
+    HCObjectJNIInstallReferenceInJObject(env, thiz, self);
 }
 
 void HCPathJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCPathJNIReferenceFieldID, HCPathJNIReferenceFieldSignature);
-    HCPathRef self = (HCPathRef)(*env)->GetLongField(env, thiz, fieldID);
-    (*env)->SetLongField(env, thiz, fieldID, (jlong)NULL);
-    HCRelease(self);
+    HCObjectJNIReleaseReferenceInJObject(env, thiz);
 }
 
 HCPathRef HCPathJNIFromJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCPathJNIReferenceFieldID, HCPathJNIReferenceFieldSignature);
-    HCPathRef self = (HCPathRef)(*env)->GetLongField(env, thiz, fieldID);
-    return self;
+    return HCObjectJNIFromJObject(env, thiz);
 }
 
 jobject HCPathJNINewJObject(JNIEnv* env, HCPathRef self) {
-    jclass clazz = (*env)->FindClass(env, HCPathJNIClass);
-    jmethodID constructor = (*env)->GetMethodID(env, clazz, "<init>", "()V");
-    jobject thiz = (*env)->NewObject(env, clazz, constructor);
+    jmethodID constructor = (*env)->GetMethodID(env, HCPathJNIClazz, "<init>", "()V");
+    jobject thiz = (*env)->NewObject(env, HCPathJNIClazz, constructor);
     HCPathJNIInstallReferenceInJObject(env, thiz, self);
     return thiz;
 }

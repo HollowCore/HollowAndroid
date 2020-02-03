@@ -15,20 +15,9 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
-
 #define HCPathJNIClass "com/hollowcore/hollowjava/graphic/Path"
-#define HCPathJNIReferenceFieldID "reference"
-#define HCPathJNIReferenceFieldSignature "J"
-#define HCPathJNICommandEnum "com/hollowcore/hollowjava/graphic/Path$Command"
-#define HCPathJNIElementClass "com/hollowcore/hollowjava/graphic/Path$Element"
-#define HCPathJNIElementCommandFieldID "command"
-#define HCPathJNIElementCommandFieldSignature "L" HCPathJNICommandEnum ";"
-#define HCPathJNIElementPointsFieldID "points"
-#define HCPathJNIElementPointsFieldSignature "[L" HCPointJNIClass ";"
-#define HCPathJNIIntersectionListenerClass "com/hollowcore/hollowjava/graphic/Path$IntersectionListener"
-#define HCPathJNIIntersectionListenerIntersectionMethodID "intersection"
-#define HCPathJNIIntersectionListenerIntersectionMethodSignature "(L" HCPathJNIClass ";L" HCPathJNIClass ";L" HCPointJNIClass ";)Z"
 
+void HCPathJNIOnLoad(JNIEnv* env);
 void HCPathJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCPathRef self);
 void HCPathJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz);
 HCPathRef HCPathJNIFromJObject(JNIEnv* env, jobject thiz);

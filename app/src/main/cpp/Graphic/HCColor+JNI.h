@@ -16,9 +16,8 @@
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
 #define HCColorJNIClass "com/hollowcore/hollowjava/graphic/Color"
-#define HCColorJNIReferenceFieldID "reference"
-#define HCColorJNIReferenceFieldSignature "J"
 
+void HCColorJNIOnLoad(JNIEnv* env);
 void HCColorJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCColor self);
 void HCColorJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz);
 HCColor HCColorJNIFromJObject(JNIEnv* env, jobject thiz);

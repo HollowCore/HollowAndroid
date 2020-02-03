@@ -1,6 +1,9 @@
 package com.hollowcore.hollowjava.container;
 
+import com.hollowcore.hollowjava.core.HollowObject;
+
 import java.util.AbstractSet;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -10,10 +13,16 @@ public class HollowSet extends AbstractSet implements Set {
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Construction
     //----------------------------------------------------------------------------------------------------------------------------------
+    public HollowSet() { this(8); }
     public HollowSet(int capacity) { initNative(capacity); }
     private native void initNative(int capacity);
 
-    private HollowSet() { reference = 0xDEADBEEF; }
+    public HollowSet(Collection c) {
+        this(c.size());
+        addAll(c);
+    }
+
+    private HollowSet(HollowObject unused) { reference = 0xDEADBEEF; }
 
     protected void finalize() throws Throwable {
         finalizeNative();
@@ -72,8 +81,27 @@ public class HollowSet extends AbstractSet implements Set {
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Set Interface Support
     //----------------------------------------------------------------------------------------------------------------------------------
-    // TODO: Implement with hasNext, next, remove
-    public Iterator iterator() {
-        return null;
+    public Iterator iterator() { return iteratorNative(); }
+    private native Iterator iteratorNative();
+
+    private class HollowSetIterator implements Iterator {
+        private long reference = 0;
+
+        private HollowSetIterator() { reference = 0xDEADBEEF; }
+
+        protected void finalize() throws Throwable {
+            finalizeIteratorNative();
+            super.finalize();
+        }
+        private native void finalizeIteratorNative();
+
+        public boolean hasNext() { return hasNextNative(); }
+        private native boolean hasNextNative();
+
+        public Object next() { return nextNative(); }
+        private native Object nextNative();
+
+        public void remove() { removeNative(); }
+        private native void removeNative();
     }
 }

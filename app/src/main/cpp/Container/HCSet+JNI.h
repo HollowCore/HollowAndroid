@@ -15,11 +15,9 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
-
 #define HCSetJNIClass "com/hollowcore/hollowjava/container/HollowSet"
-#define HCSetJNIReferenceFieldID "reference"
-#define HCSetJNIReferenceFieldSignature "J"
 
+void HCSetJNIOnLoad(JNIEnv* env);
 void HCSetJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCSetRef self);
 void HCSetJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz);
 HCSetRef HCSetJNIFromJObject(JNIEnv* env, jobject thiz);

@@ -1,6 +1,9 @@
 package com.hollowcore.hollowjava.container;
 
+import com.hollowcore.hollowjava.core.HollowObject;
+
 import java.util.AbstractList;
+import java.util.Collection;
 import java.util.List;
 
 public class HollowList extends AbstractList implements List {
@@ -9,10 +12,16 @@ public class HollowList extends AbstractList implements List {
     //----------------------------------------------------------------------------------------------------------------------------------
     // MARK: - Construction
     //----------------------------------------------------------------------------------------------------------------------------------
+    public HollowList() { this(8); }
     public HollowList(int capacity) { initNative(capacity); }
     private native void initNative(int capacity);
 
-    private HollowList() { reference = 0xDEADBEEF; }
+    public HollowList(Collection c) {
+        this(c.size());
+        addAll(c);
+    }
+
+    private HollowList(HollowObject unused) { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {

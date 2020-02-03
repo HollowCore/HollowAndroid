@@ -1,5 +1,7 @@
 package com.hollowcore.hollowjava.geometry;
 
+import com.hollowcore.hollowjava.core.HollowObject;
+
 public class Size {
     private long reference = 0;
 
@@ -16,7 +18,7 @@ public class Size {
         initNative(width, height);
     }
     private native void initNative(double width, double height);
-    private Size() { reference = 0xDEADBEEF; }
+    private Size(HollowObject unused) { reference = 0xDEADBEEF; }
 
     @Override
     protected void finalize() throws Throwable {

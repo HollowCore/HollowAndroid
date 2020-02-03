@@ -7,39 +7,45 @@
 //
 
 #include "HCRectangle+JNI.h"
+#include "../Core/HCObject+JNI.h"
 #include "HCPoint+JNI.h"
 #include "HCSize+JNI.h"
 
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
+jclass HCRectangleJNIClazz = NULL;
+
+#define HCRectangleJNIEdgeEnum "com/hollowcore/hollowjava/geometry/Rectangle$Edge"
+
+void HCRectangleJNIOnLoad(JNIEnv* env) {
+    HCRectangleJNIClazz = (*env)->NewGlobalRef(env, (*env)->FindClass(env, HCRectangleJNIClass));
+    HCObjectJNIAssociateTypeToClass(env, HCDataType, HCRectangleJNIClazz);
+}
+
 void HCRectangleJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCRectangle self) {
     HCDataRef value = HCDataCreateWithBytes(sizeof(self), (HCByte*)&self);
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCRectangleJNIReferenceFieldID, HCRectangleJNIReferenceFieldSignature);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCRectangleJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
     (*env)->SetLongField(env, thiz, fieldID, (jlong)value);
 }
 
 void HCRectangleJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCRectangleJNIReferenceFieldID, HCRectangleJNIReferenceFieldSignature);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCRectangleJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
     HCDataRef value = (HCDataRef)(*env)->GetLongField(env, thiz, fieldID);
     (*env)->SetLongField(env, thiz, fieldID, (jlong)NULL);
     HCRelease(value);
 }
 
 HCRectangle HCRectangleJNIFromJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCRectangleJNIReferenceFieldID, HCRectangleJNIReferenceFieldSignature);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCRectangleJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
     HCDataRef value = (HCDataRef)(*env)->GetLongField(env, thiz, fieldID);
     HCRectangle self = *((HCRectangle*)HCDataBytes(value));
     return self;
 }
 
 jobject HCRectangleJNINewJObject(JNIEnv* env, HCRectangle self) {
-    jclass clazz = (*env)->FindClass(env, HCRectangleJNIClass);
-    jmethodID constructor = (*env)->GetMethodID(env, clazz, "<init>", "()V");
-    jobject thiz = (*env)->NewObject(env, clazz, constructor);
+    jmethodID constructor = (*env)->GetMethodID(env, HCRectangleJNIClazz, "<init>", "()V");
+    jobject thiz = (*env)->NewObject(env, HCRectangleJNIClazz, constructor);
     HCRectangleJNIInstallReferenceInJObject(env, thiz, self);
     return thiz;
 }
@@ -304,8 +310,7 @@ Java_com_hollowcore_hollowjava_geometry_Rectangle_dividedNative(JNIEnv *env, job
     HCRectangle remainder = HCRectangleZero;
     HCRectangleDivide(self, &slice, &remainder, amount, edge);
 
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jobjectArray rectangles = (*env)->NewObjectArray(env, 2, clazz, NULL);
+    jobjectArray rectangles = (*env)->NewObjectArray(env, 2, HCRectangleJNIClazz, NULL);
     (*env)->SetObjectArrayElement(env, rectangles, 0, HCRectangleJNINewJObject(env, slice));
     (*env)->SetObjectArrayElement(env, rectangles, 0, HCRectangleJNINewJObject(env, remainder));
     return rectangles;

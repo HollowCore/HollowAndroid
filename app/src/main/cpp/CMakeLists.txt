@@ -20,6 +20,7 @@ add_library(
         SHARED
 
         # Provides a relative path to your source file(s).
+        Core/HCCore+JNI.c
         Core/HCObject+JNI.c
         Container/HCList+JNI.c
         Container/HCMap+JNI.c

@@ -16,10 +16,8 @@
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
 #define HCRectangleJNIClass "com/hollowcore/hollowjava/geometry/Rectangle"
-#define HCRectangleJNIReferenceFieldID "reference"
-#define HCRectangleJNIReferenceFieldSignature "J"
-#define HCRectangleJNIEdgeEnum "com/hollowcore/hollowjava/geometry/Rectangle$Edge"
 
+void HCRectangleJNIOnLoad(JNIEnv* env);
 void HCRectangleJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCRectangle self);
 void HCRectangleJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz);
 HCRectangle HCRectangleJNIFromJObject(JNIEnv* env, jobject thiz);

@@ -8,9 +8,18 @@ import android.os.Bundle;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.hollowcore.hollowjava.container.HollowList;
+import com.hollowcore.hollowjava.container.HollowMap;
+import com.hollowcore.hollowjava.container.HollowSet;
+import com.hollowcore.hollowjava.data.HollowNumber;
+import com.hollowcore.hollowjava.data.HollowString;
 import com.hollowcore.hollowjava.graphic.Path;
 import com.hollowcore.hollowjava.geometry.Point;
 import com.hollowcore.hollowjava.graphic.Raster;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
     static {
@@ -21,6 +30,62 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        String description = "";
+
+        // Create sample list collection
+        List<HollowNumber> list = new HollowList(8);
+        list.add(new HollowNumber(0));
+        list.add(new HollowNumber(1));
+        list.add(new HollowNumber(2));
+        list.add(new HollowNumber(3));
+        list.add(new HollowNumber(4));
+        description += "List Count: " + list.size() + "\n";
+        description += "List Contains(2): " + list.contains(new HollowNumber(2)) + "\n";
+        list.remove(new HollowNumber(2));
+        description += "List Post-Delete Count: " + list.size() + "\n";
+        description += "List Post-Delete Contains(2): " + list.contains(new HollowNumber(2)) + "\n";
+        description += "List Contents: \n";
+        for (HollowNumber o : list) {
+            description += " " + o.asInteger() + "\n";
+        }
+        description += "\n";
+
+        // Create sample set collection
+        Set<HollowNumber> set = new HollowSet(8);
+        set.add(new HollowNumber(0));
+        set.add(new HollowNumber(1));
+        set.add(new HollowNumber(2));
+        set.add(new HollowNumber(3));
+        set.add(new HollowNumber(4));
+        description += "Set Count: " + set.size() + "\n";
+        description += "Set Contains(2): " + set.contains(new HollowNumber(2)) + "\n";
+        set.remove(new HollowNumber(2));
+        description += "Set Post-Delete Count: " + set.size() + "\n";
+        description += "Set Post-Delete Contains(2): " + set.contains(new HollowNumber(2)) + "\n";
+        description += "Set Contents: \n";
+        for (HollowNumber o : set) {
+            description += " " + o.asInteger() + "\n";
+        }
+        description += "\n";
+
+        // Create sample map collection
+        Map<HollowNumber, HollowString> map = new HollowMap(8);
+        map.put(new HollowNumber(0), new HollowString("0"));
+        map.put(new HollowNumber(1), new HollowString("1"));
+        map.put(new HollowNumber(2), new HollowString("2"));
+        map.put(new HollowNumber(3), new HollowString("3"));
+        map.put(new HollowNumber(4), new HollowString("4"));
+        description += "Map Count: " + map.size() + "\n";
+        description += "Map For(2): " + map.get(new HollowNumber(2)).asInteger() + "\n";
+        map.remove(new HollowNumber(2));
+        description += "Map Post-Delete Count: " + map.size() + "\n";
+        description += "Map Post-Delete For(2): " + map.get(new HollowNumber(2)) + "\n";
+        description += "Map Contents: \n";
+        for (Map.Entry<HollowNumber, HollowString> e : map.entrySet()) {
+            description += " " + e.getKey() + ": " + e.getValue() + "\n";
+        }
+        description += "\n";
 
         // Create sample paths
         String pathData = "M1,1L4,2 5,5 3,4Z";
@@ -34,36 +99,34 @@ public class MainActivity extends AppCompatActivity {
         String otherPathData = "M0,0L50,100";
         Path other = new Path(otherPathData);
 
-        // Build a description of the path
-        String pathDescription = "";
-        pathDescription += "Count: " + path.getElementCount() + "\n";
-        pathDescription += "Elements: \n";
+        description += "Path Count: " + path.getElementCount() + "\n";
+        description += "Path Elements: \n";
         for (int elementIndex = 0; elementIndex < path.getElementCount(); elementIndex++) {
             Path.Element element = path.getElement(elementIndex);
-            pathDescription += " " + element.toString() + "\n";
+            description += " " + element.toString() + "\n";
         }
-        pathDescription += "CurrentPoint: " + path.getCurrentPoint() + "\n";
-        pathDescription += "SVGPathData: " + path.asSVGPathData() + "\n";
-        pathDescription += "LineSegmentCount: " + path.asLineSegments().length / 2 + "\n";
-        pathDescription += "Bounds: " + path.getBounds() + "\n";
-        pathDescription += "Contains(3,3): " + path.contains(new Point(3,3)) + "\n";
-        pathDescription += "Contains(30,30): " + path.contains(new Point(30.0,30.0)) + "\n";
-        pathDescription += "Contains(100,100): " + path.contains(new Point(100.0,100.0)) + "\n";
-        pathDescription += "Intersects(" + otherPathData + "): " + path.intersects(other) + "\n";
-        pathDescription += "Intersections(" + otherPathData + "): \n";
+        description += "Path CurrentPoint: " + path.getCurrentPoint() + "\n";
+        description += "Path SVGPathData: " + path.asSVGPathData() + "\n";
+        description += "Path LineSegmentCount: " + path.asLineSegments().length / 2 + "\n";
+        description += "Path Bounds: " + path.getBounds() + "\n";
+        description += "Path Contains(3,3): " + path.contains(new Point(3,3)) + "\n";
+        description += "Path Contains(30,30): " + path.contains(new Point(30.0,30.0)) + "\n";
+        description += "Path Contains(100,100): " + path.contains(new Point(100.0,100.0)) + "\n";
+        description += "Path Intersects(" + otherPathData + "): " + path.intersects(other) + "\n";
+        description += "Path Intersections(" + otherPathData + "): \n";
 
         // Apply the path description to the sample label
         TextView tv = findViewById(R.id.sample_text);
-        tv.setText(pathDescription);
+        tv.setText(description);
 
         // Add path intersections to the description
         path.intersections(other, new Path.IntersectionListener() {
             @Override
             public boolean intersection(Path path, Path otherPath, Point point) {
                 TextView tv = findViewById(R.id.sample_text);
-                String pathDescription = tv.getText().toString();
-                pathDescription += " x: " + point.getX() + " y: " + point.getY() + "\n";
-                tv.setText(pathDescription);
+                String description = tv.getText().toString();
+                description += " x: " + point.getX() + " y: " + point.getY() + "\n";
+                tv.setText(description);
                 return true;
             }
         });

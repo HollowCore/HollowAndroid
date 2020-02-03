@@ -7,37 +7,41 @@
 //
 
 #include "HCColor+JNI.h"
+#include "../Core/HCObject+JNI.h"
 
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
+jclass HCColorJNIClazz = NULL;
+
+void HCColorJNIOnLoad(JNIEnv* env) {
+    HCColorJNIClazz = (*env)->NewGlobalRef(env, (*env)->FindClass(env, HCColorJNIClass));
+    HCObjectJNIAssociateTypeToClass(env, HCDataType, HCColorJNIClazz);
+}
+
 void HCColorJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCColor self) {
     HCDataRef value = HCDataCreateWithBytes(sizeof(self), (HCByte*)&self);
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCColorJNIReferenceFieldID, HCColorJNIReferenceFieldSignature);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCColorJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
     (*env)->SetLongField(env, thiz, fieldID, (jlong)value);
 }
 
 void HCColorJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCColorJNIReferenceFieldID, HCColorJNIReferenceFieldSignature);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCColorJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
     HCDataRef value = (HCDataRef)(*env)->GetLongField(env, thiz, fieldID);
     (*env)->SetLongField(env, thiz, fieldID, (jlong)NULL);
     HCRelease(value);
 }
 
 HCColor HCColorJNIFromJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCColorJNIReferenceFieldID, HCColorJNIReferenceFieldSignature);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCColorJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
     HCDataRef value = (HCDataRef)(*env)->GetLongField(env, thiz, fieldID);
     HCColor self = *((HCColor*)HCDataBytes(value));
     return self;
 }
 
 jobject HCColorJNINewJObject(JNIEnv* env, HCColor self) {
-    jclass clazz = (*env)->FindClass(env, HCColorJNIClass);
-    jmethodID constructor = (*env)->GetMethodID(env, clazz, "<init>", "()V");
-    jobject thiz = (*env)->NewObject(env, clazz, constructor);
+    jmethodID constructor = (*env)->GetMethodID(env, HCColorJNIClazz, "<init>", "()V");
+    jobject thiz = (*env)->NewObject(env, HCColorJNIClazz, constructor);
     HCColorJNIInstallReferenceInJObject(env, thiz, self);
     return thiz;
 }

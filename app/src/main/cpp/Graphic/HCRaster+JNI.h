@@ -15,11 +15,9 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
-
 #define HCRasterJNIClass "com/hollowcore/hollowjava/graphic/Raster"
-#define HCRasterJNIReferenceFieldID "reference"
-#define HCRasterJNIReferenceFieldSignature "J"
 
+void HCRasterJNIOnLoad(JNIEnv* env);
 void HCRasterJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCRasterRef self);
 void HCRasterJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz);
 HCRasterRef HCRasterJNIFromJObject(JNIEnv* env, jobject thiz);

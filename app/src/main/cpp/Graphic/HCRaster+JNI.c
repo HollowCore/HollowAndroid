@@ -8,37 +8,35 @@
 //
 
 #include "HCRaster+JNI.h"
+#include "../Core/HCObject+JNI.h"
 #include "HCColor+JNI.h"
 #include "HCPath+JNI.h"
 
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
+jclass HCRasterJNIClazz = NULL;
+
+void HCRasterJNIOnLoad(JNIEnv* env) {
+    HCRasterJNIClazz = (*env)->NewGlobalRef(env, (*env)->FindClass(env, HCRasterJNIClass));
+    HCObjectJNIAssociateTypeToClass(env, HCRasterType, HCRasterJNIClazz);
+}
+
 void HCRasterJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCRasterRef self) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCRasterJNIReferenceFieldID, HCRasterJNIReferenceFieldSignature);
-    (*env)->SetLongField(env, thiz, fieldID, (jlong)self);
+    HCObjectJNIInstallReferenceInJObject(env, thiz, self);
 }
 
 void HCRasterJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCRasterJNIReferenceFieldID, HCRasterJNIReferenceFieldSignature);
-    HCRasterRef self = (HCRasterRef)(*env)->GetLongField(env, thiz, fieldID);
-    (*env)->SetLongField(env, thiz, fieldID, (jlong)NULL);
-    HCRelease(self);
+    HCObjectJNIReleaseReferenceInJObject(env, thiz);
 }
 
 HCRasterRef HCRasterJNIFromJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCRasterJNIReferenceFieldID, HCRasterJNIReferenceFieldSignature);
-    HCRasterRef self = (HCRasterRef)(*env)->GetLongField(env, thiz, fieldID);
-    return self;
+    return HCObjectJNIFromJObject(env, thiz);
 }
 
 jobject HCRasterJNINewJObject(JNIEnv* env, HCRasterRef self) {
-    jclass clazz = (*env)->FindClass(env, HCRasterJNIClass);
-    jmethodID constructor = (*env)->GetMethodID(env, clazz, "<init>", "()V");
-    jobject thiz = (*env)->NewObject(env, clazz, constructor);
+    jmethodID constructor = (*env)->GetMethodID(env, HCRasterJNIClazz, "<init>", "()V");
+    jobject thiz = (*env)->NewObject(env, HCRasterJNIClazz, constructor);
     HCRasterJNIInstallReferenceInJObject(env, thiz, self);
     return thiz;
 }

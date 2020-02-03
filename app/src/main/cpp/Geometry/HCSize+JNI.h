@@ -16,9 +16,8 @@
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
 #define HCSizeJNIClass "com/hollowcore/hollowjava/geometry/Size"
-#define HCSizeJNIReferenceFieldID "reference"
-#define HCSizeJNIReferenceFieldSignature "J"
 
+void HCSizeJNIOnLoad(JNIEnv* env);
 void HCSizeJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCSize self);
 void HCSizeJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz);
 HCSize HCSizeJNIFromJObject(JNIEnv* env, jobject thiz);

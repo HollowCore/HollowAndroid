@@ -16,9 +16,8 @@
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
 #define HCPointJNIClass "com/hollowcore/hollowjava/geometry/Point"
-#define HCPointJNIReferenceFieldID "reference"
-#define HCPointJNIReferenceFieldSignature "J"
 
+void HCPointJNIOnLoad(JNIEnv* env);
 void HCPointJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCPoint self);
 void HCPointJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz);
 HCPoint HCPointJNIFromJObject(JNIEnv* env, jobject thiz);

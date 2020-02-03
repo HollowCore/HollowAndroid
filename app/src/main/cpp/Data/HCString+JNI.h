@@ -15,11 +15,9 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
-
 #define HCStringJNIClass "com/hollowcore/hollowjava/data/HollowString"
-#define HCStringJNIReferenceFieldID "reference"
-#define HCStringJNIReferenceFieldSignature "J"
 
+void HCStringJNIOnLoad(JNIEnv* env);
 void HCStringJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCStringRef self);
 void HCStringJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz);
 HCStringRef HCStringJNIFromJObject(JNIEnv* env, jobject thiz);

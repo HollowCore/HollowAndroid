@@ -15,11 +15,9 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
-
 #define HCMapJNIClass "com/hollowcore/hollowjava/container/HollowMap"
-#define HCMapJNIReferenceFieldID "reference"
-#define HCMapJNIReferenceFieldSignature "J"
 
+void HCMapJNIOnLoad(JNIEnv* env);
 void HCMapJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCMapRef self);
 void HCMapJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz);
 HCMapRef HCMapJNIFromJObject(JNIEnv* env, jobject thiz);

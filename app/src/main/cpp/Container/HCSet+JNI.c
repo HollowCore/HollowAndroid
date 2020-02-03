@@ -13,31 +13,32 @@
 //----------------------------------------------------------------------------------------------------------------------------------
 // MARK: - JNI Convenience
 //----------------------------------------------------------------------------------------------------------------------------------
+jclass HCSetJNIClazz = NULL;
+jclass HCSetIteratorJNIClazz = NULL;
+
+#define HCSetIteratorJNIClass "com/hollowcore/hollowjava/container/HollowSet$HollowSetIterator"
+
+void HCSetJNIOnLoad(JNIEnv* env) {
+    HCSetJNIClazz = (*env)->NewGlobalRef(env, (*env)->FindClass(env, HCSetJNIClass));
+    HCSetIteratorJNIClazz = (*env)->NewGlobalRef(env, (*env)->FindClass(env, HCSetIteratorJNIClass));
+    HCObjectJNIAssociateTypeToClass(env, HCSetType, HCSetJNIClazz);
+}
+
 void HCSetJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCSetRef self) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCSetJNIReferenceFieldID, HCSetJNIReferenceFieldSignature);
-    (*env)->SetLongField(env, thiz, fieldID, (jlong)self);
+    HCObjectJNIInstallReferenceInJObject(env, thiz, self);
 }
 
 void HCSetJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCSetJNIReferenceFieldID, HCSetJNIReferenceFieldSignature);
-    HCSetRef self = (HCSetRef)(*env)->GetLongField(env, thiz, fieldID);
-    (*env)->SetLongField(env, thiz, fieldID, (jlong)NULL);
-    HCRelease(self);
+    HCObjectJNIReleaseReferenceInJObject(env, thiz);
 }
 
 HCSetRef HCSetJNIFromJObject(JNIEnv* env, jobject thiz) {
-    jclass clazz = (*env)->GetObjectClass(env, thiz);
-    jfieldID fieldID = (*env)->GetFieldID(env, clazz, HCSetJNIReferenceFieldID, HCSetJNIReferenceFieldSignature);
-    HCSetRef self = (HCSetRef)(*env)->GetLongField(env, thiz, fieldID);
-    return self;
+    return HCObjectJNIFromJObject(env, thiz);
 }
 
 jobject HCSetJNINewJObject(JNIEnv* env, HCSetRef self) {
-    jclass clazz = (*env)->FindClass(env, HCSetJNIClass);
-    jmethodID constructor = (*env)->GetMethodID(env, clazz, "<init>", "()V");
-    jobject thiz = (*env)->NewObject(env, clazz, constructor);
+    jmethodID constructor = (*env)->GetMethodID(env, HCSetJNIClazz, "<init>", "()V");
+    jobject thiz = (*env)->NewObject(env, HCSetJNIClazz, constructor);
     HCSetJNIInstallReferenceInJObject(env, thiz, self);
     return thiz;
 }
@@ -166,4 +167,70 @@ Java_com_hollowcore_hollowjava_container_HollowSet_removeNative(JNIEnv *env, job
     else {
         return (jboolean)false;
     }
+}
+
+//----------------------------------------------------------------------------------------------------------------------------------
+// MARK: - Set Interface Support
+//----------------------------------------------------------------------------------------------------------------------------------
+void HCSetIteratorJNIInstallReferenceInJObject(JNIEnv* env, jobject thiz, HCSetIterator self) {
+    HCDataRef value = HCDataCreateWithBytes(sizeof(self), (HCByte*)&self);
+    jfieldID fieldID = (*env)->GetFieldID(env, HCSetIteratorJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
+    (*env)->SetLongField(env, thiz, fieldID, (jlong)value);
+}
+
+void HCSetIteratorJNIReleaseReferenceInJObject(JNIEnv* env, jobject thiz) {
+    jfieldID fieldID = (*env)->GetFieldID(env, HCSetIteratorJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
+    HCDataRef value = (HCDataRef)(*env)->GetLongField(env, thiz, fieldID);
+    (*env)->SetLongField(env, thiz, fieldID, (jlong)NULL);
+    HCRelease(value);
+}
+
+HCSetIterator* HCSetIteratorJNIFromJObject(JNIEnv* env, jobject thiz) {
+    jfieldID fieldID = (*env)->GetFieldID(env, HCSetIteratorJNIClazz, HCObjectJNIReferenceFieldID, HCObjectJNIReferenceFieldSignature);
+    HCDataRef value = (HCDataRef)(*env)->GetLongField(env, thiz, fieldID);
+    HCSetIterator* selfPointer = (HCSetIterator*)HCDataBytes(value);
+    return selfPointer;
+}
+
+jobject HCSetIteratorJNINewJObject(JNIEnv* env, HCSetIterator self) {
+    jmethodID constructor = (*env)->GetMethodID(env, HCSetIteratorJNIClazz, "<init>", "()V");
+    jobject thiz = (*env)->NewObject(env, HCSetIteratorJNIClazz, constructor);
+    HCSetIteratorJNIInstallReferenceInJObject(env, thiz, self);
+    return thiz;
+}
+
+JNIEXPORT jobject JNICALL
+Java_com_hollowcore_hollowjava_container_HollowSet_iteratorNative(JNIEnv *env, jobject thiz) {
+    HCSetRef self = HCSetJNIFromJObject(env, thiz);
+    HCSetIterator i = HCSetIterationBegin(self);
+    return HCSetIteratorJNINewJObject(env, i);
+}
+
+JNIEXPORT void JNICALL
+Java_com_hollowcore_hollowjava_container_HollowSet_00024HollowSetIterator_finalizeIteratorNative(JNIEnv *env, jobject thiz) {
+    HCSetIteratorJNIReleaseReferenceInJObject(env, thiz);
+}
+
+JNIEXPORT jboolean JNICALL
+Java_com_hollowcore_hollowjava_container_HollowSet_00024HollowSetIterator_hasNextNative(JNIEnv *env, jobject thiz) {
+    // NOTE: The concept of "hasNext" for Iterator is the same as "ended" for HCSetIterator, not "hasNext".
+    HCSetIterator* i = HCSetIteratorJNIFromJObject(env, thiz);
+    HCBoolean hasEnded = HCSetIterationHasEnded(i);
+    return (jboolean)!hasEnded;
+}
+
+JNIEXPORT jobject JNICALL
+Java_com_hollowcore_hollowjava_container_HollowSet_00024HollowSetIterator_nextNative(JNIEnv *env, jobject thiz) {
+    // NOTE: The concept of "next" for Iterator is the same as "current" for HCSetIterator, but also indicates to move to "next".
+    HCSetIterator* i = HCSetIteratorJNIFromJObject(env, thiz);
+    HCRef object = i->object;
+    HCSetIterationNext(i);
+    return HCObjectJNINewJObject(env, object);
+}
+
+JNIEXPORT void JNICALL
+Java_com_hollowcore_hollowjava_container_HollowSet_00024HollowSetIterator_removeNative(JNIEnv *env, jobject thiz) {
+    HCSetIterator* i = HCSetIteratorJNIFromJObject(env, thiz);
+    // TODO: Does this put the iterator in an invalid state?
+    HCSetRemoveObject(i->set, i->object);
 }
